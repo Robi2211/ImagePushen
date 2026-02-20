@@ -3,38 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ImagePushen - Webseite</title>
+    <title>Event-Management</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>Willkommen bei ImagePushen</h1>
-        <p>Eine einfache Webseite mit JavaScript, HTML, CSS und Node.js in Docker</p>
+        <h1>&#127882; Event-Management</h1>
+        <p>Events erstellen &bull; Teilnehmer anmelden &bull; Teilnehmerliste anzeigen</p>
     </header>
 
     <main>
+
+        <!-- ── Event erstellen ──────────────────────────────────── -->
         <section class="card">
-            <h2>Datenbankverbindung</h2>
-            <div id="db-status">
-                <p class="status loading">&#8987; Verbinde mit der Datenbank&hellip;</p>
-            </div>
+            <h2>Neues Event erstellen</h2>
+            <form id="form-event">
+                <div class="form-group">
+                    <label for="event-name">Eventname <span class="required">*</span></label>
+                    <input type="text" id="event-name" placeholder="z. B. Sommerfest 2025" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-datum">Datum <span class="required">*</span></label>
+                    <input type="date" id="event-datum" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-beschreibung">Beschreibung</label>
+                    <textarea id="event-beschreibung" rows="3" placeholder="Kurze Beschreibung des Events…"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Event erstellen</button>
+            </form>
+            <div id="event-msg"></div>
         </section>
 
+        <!-- ── Teilnehmer anmelden ──────────────────────────────── -->
         <section class="card">
-            <h2>Über dieses Projekt</h2>
-            <ul>
-                <li><strong>Webserver:</strong> Node.js mit Express</li>
-                <li><strong>Datenbank:</strong> MySQL 8</li>
-                <li><strong>Orchestrierung:</strong> Docker Compose</li>
-                <li><strong>Persistenz:</strong> Docker Volumes</li>
-            </ul>
+            <h2>Teilnehmer anmelden</h2>
+            <div class="form-group">
+                <label for="select-event-anmelden">Event auswählen <span class="required">*</span></label>
+                <select id="select-event-anmelden">
+                    <option value="">– Event wählen –</option>
+                </select>
+            </div>
+            <form id="form-teilnehmer">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="t-vorname">Vorname <span class="required">*</span></label>
+                        <input type="text" id="t-vorname" placeholder="Max" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="t-nachname">Nachname <span class="required">*</span></label>
+                        <input type="text" id="t-nachname" placeholder="Mustermann" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="t-email">E-Mail <span class="required">*</span></label>
+                    <input type="email" id="t-email" placeholder="max@beispiel.ch" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Anmelden</button>
+            </form>
+            <div id="teilnehmer-msg"></div>
         </section>
+
+        <!-- ── Teilnehmerliste ──────────────────────────────────── -->
+        <section class="card">
+            <h2>Teilnehmerliste</h2>
+            <div class="form-group">
+                <label for="select-event-liste">Event auswählen</label>
+                <select id="select-event-liste">
+                    <option value="">– Event wählen –</option>
+                </select>
+            </div>
+            <div id="teilnehmerliste"></div>
+        </section>
+
     </main>
 
     <footer>
-        <p>&copy; 2024 ImagePushen &mdash; Modul 347</p>
+        <p>&copy; 2025 Event-Management &mdash; Modul 347</p>
     </footer>
 
     <script src="app.js"></script>
 </body>
 </html>
+
