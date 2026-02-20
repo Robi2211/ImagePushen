@@ -81,6 +81,11 @@ main {
     color: #721c24;
 }
 
+.status.loading {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
 footer {
     text-align: center;
     padding: 1.5rem;

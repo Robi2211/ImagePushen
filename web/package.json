@@ -1,0 +1,14 @@
+{
+  "name": "imagepushen-web",
+  "version": "1.0.0",
+  "description": "ImagePushen web server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.2.1",
+    "mysql2": "^3.12.0"
+  }
+}

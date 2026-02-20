@@ -1,10 +1,16 @@
-FROM php:8.2-apache
+FROM node:20-alpine
 
-# Enable mysqli extension for database connectivity
-RUN docker-php-ext-install mysqli
+WORKDIR /app
 
-# Copy website files into the Apache document root
-COPY html/ /var/www/html/
+# Install production dependencies
+COPY package.json ./
+RUN npm install --omit=dev
+
+# Copy server and static files
+COPY server.js ./
+COPY html/ ./html/
 
 # Expose port 80
 EXPOSE 80
+
+CMD ["node", "server.js"]
