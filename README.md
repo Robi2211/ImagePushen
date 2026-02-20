@@ -14,6 +14,9 @@ gebaut mit Docker und Docker Compose.
 
 ```
 ImagePushen/
+├── .github/
+│   └── workflows/
+│       └── docker-publish.yml  # CI/CD: Image bauen & auf Docker Hub pushen
 ├── web/
 │   ├── Dockerfile          # Custom Node.js Image
 │   ├── server.js           # Express-Backend (REST API)
@@ -117,10 +120,31 @@ docker push robi2211/imagepushen-web:latest
 
 ---
 
+## Automatisches Bauen & Pushen (GitHub Actions)
+
+Der Workflow `.github/workflows/docker-publish.yml` baut das Image automatisch und
+pusht es zu Docker Hub, sobald Änderungen an `web/**` auf den `main`-Branch gepusht
+werden.
+
+**Einmalige Einrichtung der GitHub Secrets:**
+
+1. Öffne das Repository auf GitHub → **Settings → Secrets and variables → Actions**
+2. Füge folgende Repository Secrets hinzu:
+
+| Secret | Beschreibung |
+|--------|--------------|
+| `DOCKERHUB_USERNAME` | Dein Docker Hub Benutzername (z. B. `robi2211`) |
+| `DOCKERHUB_TOKEN` | Ein Docker Hub Access Token (**Account Settings → Security → New Access Token**) |
+
+Danach genügt ein `git push` – das Image wird automatisch gebaut und gepusht.
+
+---
+
 ## Zukünftige Änderungen der Webseite veröffentlichen
 
 1. Dateien in `web/html/` oder `web/server.js` bearbeiten.
-2. Image neu bauen und pushen:
+2. Änderungen committen und auf `main` pushen – GitHub Actions baut und pusht das Image automatisch.
+   Alternativ manuell:
    ```bash
    docker build -t robi2211/imagepushen-web:latest ./web
    docker push robi2211/imagepushen-web:latest
