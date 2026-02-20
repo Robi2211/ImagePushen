@@ -34,7 +34,7 @@ ImagePushen/
 
 ## 🚀 Start vom Docker Hub Image (empfohlen – kein Build nötig)
 
-Das Web-Image ist fertig gebaut auf Docker Hub verfügbar (`robi2211/imagepushen-web:latest`).
+Das Web-Image ist fertig gebaut auf Docker Hub verfügbar (`robin223567/imagepushen-web:latest`).
 Damit lässt sich das Projekt mit folgenden drei Befehlen starten:
 
 ```bash
@@ -114,7 +114,7 @@ EXPOSE 80
 CMD ["node", "server.js"]
 ```
 
-Das Image wird unter `robi2211/imagepushen-web:latest` auf Docker Hub veröffentlicht.
+Das Image wird unter `robin223567/imagepushen-web:latest` auf Docker Hub veröffentlicht.
 
 ### 2. Datenbank (MySQL 8)
 
@@ -131,7 +131,7 @@ Beim ersten Start wird `db/init.sql` automatisch ausgeführt und legt die Tabell
 
 | Service | Image | Port | Persistenz |
 |---------|-------|------|------------|
-| `web`   | `robi2211/imagepushen-web:latest` (custom) | 8080→80 | – |
+| `web`   | `robin223567/imagepushen-web:latest` (custom) | 8080→80 | – |
 | `db`    | `mysql:8` | intern | Volume `db_data` |
 
 Der Webserver startet erst, wenn die Datenbank bereit ist (`depends_on` + `healthcheck`).
@@ -145,10 +145,10 @@ Der Webserver startet erst, wenn die Datenbank bereit ist (`depends_on` + `healt
 docker login
 
 # 2. Image bauen
-docker build -t robi2211/imagepushen-web:latest ./web
+docker build -t robin223567/imagepushen-web:latest ./web
 
 # 3. Image pushen
-docker push robi2211/imagepushen-web:latest
+docker push robin223567/imagepushen-web:latest
 ```
 
 ---
@@ -158,8 +158,8 @@ docker push robi2211/imagepushen-web:latest
 1. Dateien in `web/html/` oder `web/server.js` bearbeiten.
 2. Image neu bauen und pushen:
    ```bash
-   docker build -t robi2211/imagepushen-web:latest ./web
-   docker push robi2211/imagepushen-web:latest
+   docker build -t robin223567/imagepushen-web:latest ./web
+   docker push robin223567/imagepushen-web:latest
    ```
 3. Auf dem Zielserver das neue Image holen und Container neu starten:
    ```bash
@@ -200,7 +200,7 @@ Nur `down -v` löscht das Volume und damit die Daten.
 | Webseite persistent verfügbar | Custom Image + Docker Volume für DB |
 | Datenbanksystem in Docker | MySQL 8 mit persistentem Volume |
 | Ein Service pro Container | `web` und `db` sind getrennte Services |
-| Eigenes Image erstellt | `robi2211/imagepushen-web:latest` |
+| Eigenes Image erstellt | `robin223567/imagepushen-web:latest` |
 | Image auf Repository gepusht | Docker Hub |
 | Anleitung für Lehrperson | Dieser README (git clone + docker-compose up) |
 | Event-Management-System | Events erstellen, Teilnehmer anmelden, Teilnehmerliste anzeigen |

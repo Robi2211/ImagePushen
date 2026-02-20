@@ -12,7 +12,7 @@ services:
   # Webserver: pre-built Image von Docker Hub
   # ---------------------------------------------------------
   web:
-    image: robi2211/imagepushen-web:latest
+    image: robin223567/imagepushen-web:latest
     restart: unless-stopped
     ports:
       - "8080:80"
