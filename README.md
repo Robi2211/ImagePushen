@@ -17,13 +17,43 @@ ImagePushen/
 ├── db/
 │   └── init.sql            # Initiales Datenbankschema
 ├── docker-compose/
-│   └── docker-compose.yml  # Orchestrierung beider Services
+│   ├── docker-compose.yml  # Orchestrierung beider Services
+│   └── .env.example        # Vorlage für Umgebungsvariablen
+├── Makefile                # Kurzbefehl-Sammlung (make start, make stop, …)
 └── README.md
 ```
 
 ---
 
+## Voraussetzungen
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (enthält Docker Engine + Compose)  
+  Oder: Docker Engine + Docker Compose Plugin auf Linux
+
+---
+
 ## Schnellstart (für Lehrperson / Play with Docker)
+
+### Option A – mit `make` (empfohlen)
+
+```bash
+git clone https://github.com/Robi2211/ImagePushen
+cd ImagePushen
+make start
+```
+
+`make start` kopiert automatisch die `.env.example` nach `.env` (falls noch nicht vorhanden)
+und startet alle Services inklusive Build.
+
+| Befehl | Aktion |
+|--------|--------|
+| `make start` | Services starten (baut Image automatisch) |
+| `make stop` | Services stoppen (Daten bleiben erhalten) |
+| `make logs` | Live-Logs aller Services anzeigen |
+| `make build` | Image neu bauen |
+| `make clean` | Services stoppen **und** Volumes löschen |
+
+### Option B – manuell mit Docker Compose
 
 ```bash
 git clone https://github.com/Robi2211/ImagePushen
@@ -31,9 +61,12 @@ cd ImagePushen
 
 # Passwörter setzen (optional – Standardwerte funktionieren für Tests)
 cp docker-compose/.env.example docker-compose/.env
-# Werte in docker-compose/.env nach Bedarf anpassen
 
-docker-compose -f docker-compose/docker-compose.yml up -d
+# Neuere Docker-Versionen (Plugin):
+docker compose -f docker-compose/docker-compose.yml up -d --build
+
+# Ältere Installationen (standalone):
+docker-compose -f docker-compose/docker-compose.yml up -d --build
 ```
 
 Danach ist die Webseite unter **http://localhost:8080** erreichbar.
@@ -105,8 +138,8 @@ docker push robi2211/imagepushen-web:latest
    ```
 3. Auf dem Zielserver das neue Image holen und Container neu starten:
    ```bash
-   docker-compose -f docker-compose/docker-compose.yml pull web
-   docker-compose -f docker-compose/docker-compose.yml up -d --no-deps web
+   docker compose -f docker-compose/docker-compose.yml pull web
+   docker compose -f docker-compose/docker-compose.yml up -d --no-deps web
    ```
 
 ---
@@ -115,13 +148,16 @@ docker push robi2211/imagepushen-web:latest
 
 ```bash
 # Stoppen (Daten bleiben erhalten)
-docker-compose -f docker-compose/docker-compose.yml down
+make stop
+# oder: docker compose -f docker-compose/docker-compose.yml down
 
 # Starten
-docker-compose -f docker-compose/docker-compose.yml up -d
+make start
+# oder: docker compose -f docker-compose/docker-compose.yml up -d --build
 
 # Komplett aufräumen inkl. Volumes (Daten werden gelöscht)
-docker-compose -f docker-compose/docker-compose.yml down -v
+make clean
+# oder: docker compose -f docker-compose/docker-compose.yml down -v
 ```
 
 ---
@@ -131,6 +167,35 @@ docker-compose -f docker-compose/docker-compose.yml down -v
 Die Datenbankdaten werden im Docker Volume `db_data` gespeichert.
 Auch nach einem `docker-compose down` und erneutem `up` sind alle Daten noch vorhanden.
 Nur `down -v` löscht das Volume und damit die Daten.
+
+---
+
+## Fehlerbehebung
+
+### `Permission denied (publickey)` beim Klonen
+
+```
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+```
+
+**Ursache:** Du versuchst das Repository über SSH zu klonen, aber auf deinem Rechner ist kein SSH-Schlüssel für GitHub hinterlegt.
+
+**Lösung – HTTPS statt SSH verwenden (empfohlen):**
+
+```bash
+git clone https://github.com/Robi2211/ImagePushen
+```
+
+Stelle sicher, dass du die URL mit `https://` beginnst und **nicht** `git@github.com:`.  
+GitHub fordert dann bei Bedarf deinen GitHub-Benutzernamen und ein [Personal Access Token](https://github.com/settings/tokens) als Passwort.
+
+**Alternative – SSH-Schlüssel einrichten (für Entwickler):**
+
+1. Schlüsselpaar generieren: `ssh-keygen -t ed25519 -C "deine@email.com"`
+2. Öffentlichen Schlüssel (`~/.ssh/id_ed25519.pub`) in GitHub unter  
+   **Settings → SSH and GPG keys → New SSH key** eintragen.
+3. Danach funktioniert auch `git clone git@github.com:Robi2211/ImagePushen`.
 
 ---
 
