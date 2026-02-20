@@ -14,6 +14,9 @@ gebaut mit Docker und Docker Compose.
 
 ```
 ImagePushen/
+├── .github/
+│   └── workflows/
+│       └── docker-publish.yml  # CI/CD: Image bauen & auf Docker Hub pushen
 ├── web/
 │   ├── Dockerfile          # Custom Node.js Image
 │   ├── server.js           # Express-Backend (REST API)
@@ -78,7 +81,7 @@ EXPOSE 80
 CMD ["node", "server.js"]
 ```
 
-Das Image wird unter `robi2211/imagepushen-web:latest` auf Docker Hub veröffentlicht.
+Das Image wird unter `robin223567/imagepushen-web:latest` auf Docker Hub veröffentlicht.
 
 ### 2. Datenbank (MySQL 8)
 
@@ -95,7 +98,7 @@ Beim ersten Start wird `db/init.sql` automatisch ausgeführt und legt die Tabell
 
 | Service | Image | Port | Persistenz |
 |---------|-------|------|------------|
-| `web`   | `robi2211/imagepushen-web:latest` (custom) | 8080→80 | – |
+| `web`   | `robin223567/imagepushen-web:latest` (custom) | 8080→80 | – |
 | `db`    | `mysql:8` | intern | Volume `db_data` |
 
 Der Webserver startet erst, wenn die Datenbank bereit ist (`depends_on` + `healthcheck`).
@@ -109,21 +112,42 @@ Der Webserver startet erst, wenn die Datenbank bereit ist (`depends_on` + `healt
 docker login
 
 # 2. Image bauen
-docker build -t robi2211/imagepushen-web:latest ./web
+docker build -t robin223567/imagepushen-web:latest ./web
 
 # 3. Image pushen
-docker push robi2211/imagepushen-web:latest
+docker push robin223567/imagepushen-web:latest
 ```
+
+---
+
+## Automatisches Bauen & Pushen (GitHub Actions)
+
+Der Workflow `.github/workflows/docker-publish.yml` baut das Image automatisch und
+pusht es zu Docker Hub, sobald Änderungen an `web/**` auf den `main`-Branch gepusht
+werden.
+
+**Einmalige Einrichtung der GitHub Secrets:**
+
+1. Öffne das Repository auf GitHub → **Settings → Secrets and variables → Actions**
+2. Füge folgende Repository Secrets hinzu:
+
+| Secret | Beschreibung |
+|--------|--------------|
+| `DOCKERHUB_USERNAME` | Dein Docker Hub Benutzername (z. B. `robin223567`) |
+| `DOCKERHUB_TOKEN` | Ein Docker Hub Access Token (**Account Settings → Security → New Access Token**) |
+
+Danach genügt ein `git push` – das Image wird automatisch gebaut und gepusht.
 
 ---
 
 ## Zukünftige Änderungen der Webseite veröffentlichen
 
 1. Dateien in `web/html/` oder `web/server.js` bearbeiten.
-2. Image neu bauen und pushen:
+2. Änderungen committen und auf `main` pushen – GitHub Actions baut und pusht das Image automatisch.
+   Alternativ manuell:
    ```bash
-   docker build -t robi2211/imagepushen-web:latest ./web
-   docker push robi2211/imagepushen-web:latest
+   docker build -t robin223567/imagepushen-web:latest ./web
+   docker push robin223567/imagepushen-web:latest
    ```
 3. Auf dem Zielserver das neue Image holen und Container neu starten:
    ```bash
@@ -164,7 +188,7 @@ Nur `down -v` löscht das Volume und damit die Daten.
 | Webseite persistent verfügbar | Custom Image + Docker Volume für DB |
 | Datenbanksystem in Docker | MySQL 8 mit persistentem Volume |
 | Ein Service pro Container | `web` und `db` sind getrennte Services |
-| Eigenes Image erstellt | `robi2211/imagepushen-web:latest` |
+| Eigenes Image erstellt | `robin223567/imagepushen-web:latest` |
 | Image auf Repository gepusht | Docker Hub |
 | Anleitung für Lehrperson | Dieser README (git clone + docker-compose up) |
 | Event-Management-System | Events erstellen, Teilnehmer anmelden, Teilnehmerliste anzeigen |
