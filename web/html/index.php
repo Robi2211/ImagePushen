@@ -71,7 +71,7 @@
             <h2>Über dieses Projekt</h2>
             <ul>
                 <li><strong>Webserver:</strong> Apache 2 mit PHP 8.2</li>
-                <li><strong>Datenbank:</strong> MariaDB 10</li>
+                <li><strong>Datenbank:</strong> MySQL 8</li>
                 <li><strong>Orchestrierung:</strong> Docker Compose</li>
                 <li><strong>Persistenz:</strong> Docker Volumes</li>
             </ul>

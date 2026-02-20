@@ -23,10 +23,10 @@ services:
         condition: service_healthy
 
   # ---------------------------------------------------------
-  # Datenbank: MariaDB 10 mit persistentem Volume
+  # Datenbank: MySQL 8 mit persistentem Volume
   # ---------------------------------------------------------
   db:
-    image: mariadb:10
+    image: mysql:8
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
@@ -37,7 +37,7 @@ services:
       - db_data:/var/lib/mysql
       - ../db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5

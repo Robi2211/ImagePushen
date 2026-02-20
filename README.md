@@ -1,6 +1,6 @@
 # ImagePushen
 
-Eine containerisierte Webanwendung mit Apache/PHP-Webserver und MariaDB-Datenbank,
+Eine containerisierte Webanwendung mit Apache/PHP-Webserver und MySQL-Datenbank,
 gebaut mit Docker und Docker Compose.
 
 ---
@@ -58,9 +58,9 @@ EXPOSE 80
 
 Das Image wird unter `robi2211/imagepushen-web:latest` auf Docker Hub veröffentlicht.
 
-### 2. Datenbank (MariaDB)
+### 2. Datenbank (MySQL)
 
-Es wird das offizielle `mariadb:10`-Image verwendet.
+Es wird das offizielle `mysql:8`-Image verwendet.
 Die Datenbank-Daten werden in einem **Docker Volume** (`db_data`) gespeichert –
 dadurch bleiben die Daten beim Stoppen und Starten des Containers erhalten.
 
@@ -74,7 +74,7 @@ sowie die Tabellen an.
 | Service | Image | Port | Persistenz |
 |---------|-------|------|------------|
 | `web`   | `robi2211/imagepushen-web:latest` (custom) | 8080→80 | – |
-| `db`    | `mariadb:10` | intern | Volume `db_data` |
+| `db`    | `mysql:8` | intern | Volume `db_data` |
 
 Der Webserver startet erst, wenn die Datenbank bereit ist (`depends_on` + `healthcheck`).
 
@@ -140,7 +140,7 @@ Nur `down -v` löscht das Volume und damit die Daten.
 |---|---|
 | Webserver installieren | Apache 2 via `php:8.2-apache` |
 | Webseite persistent verfügbar | Custom Image + Docker Volume für DB |
-| Datenbanksystem in Docker | MariaDB 10 mit persistentem Volume |
+| Datenbanksystem in Docker | MySQL 8 mit persistentem Volume |
 | Ein Service pro Container | `web` und `db` sind getrennte Services |
 | Eigenes Image erstellt | `robi2211/imagepushen-web:latest` |
 | Image auf Repository gepusht | Docker Hub |
