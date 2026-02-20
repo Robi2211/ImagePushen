@@ -170,6 +170,35 @@ Nur `down -v` löscht das Volume und damit die Daten.
 
 ---
 
+## Fehlerbehebung
+
+### `Permission denied (publickey)` beim Klonen
+
+```
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+```
+
+**Ursache:** Du versuchst das Repository über SSH zu klonen, aber auf deinem Rechner ist kein SSH-Schlüssel für GitHub hinterlegt.
+
+**Lösung – HTTPS statt SSH verwenden (empfohlen):**
+
+```bash
+git clone https://github.com/Robi2211/ImagePushen
+```
+
+Stelle sicher, dass du die URL mit `https://` beginnst und **nicht** `git@github.com:`.  
+GitHub fordert dann bei Bedarf deinen GitHub-Benutzernamen und ein [Personal Access Token](https://github.com/settings/tokens) als Passwort.
+
+**Alternative – SSH-Schlüssel einrichten (für Entwickler):**
+
+1. Schlüsselpaar generieren: `ssh-keygen -t ed25519 -C "deine@email.com"`
+2. Öffentlichen Schlüssel (`~/.ssh/id_ed25519.pub`) in GitHub unter  
+   **Settings → SSH and GPG keys → New SSH key** eintragen.
+3. Danach funktioniert auch `git clone git@github.com:Robi2211/ImagePushen`.
+
+---
+
 ## Anforderungserfüllung
 
 | Anforderung | Lösung |
