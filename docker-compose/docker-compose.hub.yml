@@ -1,14 +1,17 @@
 version: '3.8'
 
+# Startet das Projekt direkt vom veröffentlichten Docker Hub Image.
+# Kein lokales Bauen notwendig – das Image wird automatisch von Docker Hub gepullt.
+#
+# Verwendung:
+#   docker-compose -f docker-compose/docker-compose.hub.yml up -d
+
 services:
 
   # ---------------------------------------------------------
-  # Webserver: Node.js mit Express (custom image)
+  # Webserver: pre-built Image von Docker Hub
   # ---------------------------------------------------------
   web:
-    build:
-      context: ../web
-      dockerfile: Dockerfile
     image: robin223567/imagepushen-web:latest
     restart: unless-stopped
     ports:
