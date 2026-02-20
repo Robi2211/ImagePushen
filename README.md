@@ -1,6 +1,6 @@
 # ImagePushen
 
-Eine containerisierte Webanwendung mit Apache/PHP-Webserver und MySQL-Datenbank,
+Eine containerisierte Webanwendung mit Node.js/Express-Webserver und MySQL-Datenbank,
 gebaut mit Docker und Docker Compose.
 
 ---
@@ -10,14 +10,18 @@ gebaut mit Docker und Docker Compose.
 ```
 ImagePushen/
 ├── web/
-│   ├── Dockerfile          # Custom PHP/Apache Image
+│   ├── Dockerfile          # Custom Node.js/Express Image
+│   ├── server.js           # Express-Server (API + statische Dateien)
+│   ├── package.json
 │   └── html/
-│       ├── index.php       # Hauptseite (zeigt DB-Verbindung & Besuchszähler)
+│       ├── index.html      # Hauptseite (zeigt DB-Verbindung & Besuchszähler)
+│       ├── app.js          # Frontend-JavaScript
 │       └── style.css       # Stylesheet
 ├── db/
 │   └── init.sql            # Initiales Datenbankschema
 ├── docker-compose/
-│   └── docker-compose.yml  # Orchestrierung beider Services
+│   ├── docker-compose.yml  # Orchestrierung beider Services
+│   └── .env.example        # Beispiel-Umgebungsvariablen
 └── README.md
 ```
 
@@ -42,21 +46,27 @@ Danach ist die Webseite unter **http://localhost:8080** erreichbar.
 
 ## Wie es gebaut wurde
 
-### 1. Webserver (Apache + PHP)
+### 1. Webserver (Node.js + Express)
 
-Das custom Image basiert auf dem offiziellen `php:8.2-apache`-Image.
-Die `mysqli`-Erweiterung wird nachinstalliert, damit PHP mit MariaDB kommunizieren kann.
-Die Webseite-Dateien (`index.php`, `style.css`) werden ins Document-Root kopiert.
+Das custom Image basiert auf dem offiziellen `node:20-alpine`-Image.
+Es wird ein Express-Server gestartet, der statische Dateien aus `html/` ausliefert
+und einen `/api/visits`-Endpunkt für den Besuchszähler bereitstellt.
+Die Webseite-Dateien (`index.html`, `style.css`, `app.js`) werden ins `/app/html/`-Verzeichnis kopiert.
 
 **`web/Dockerfile`**
 ```dockerfile
-FROM php:8.2-apache
-RUN docker-php-ext-install mysqli
-COPY html/ /var/www/html/
+FROM node:20-alpine
+WORKDIR /app
+COPY package.json ./
+RUN npm install --omit=dev
+COPY server.js ./
+COPY html/ ./html/
 EXPOSE 80
+CMD ["node", "server.js"]
 ```
 
 Das Image wird unter `robi2211/imagepushen-web:latest` auf Docker Hub veröffentlicht.
+Das Image ist bereits gebaut und auf Docker Hub verfügbar – ein eigenes Bauen ist für den Start **nicht nötig**.
 
 ### 2. Datenbank (MySQL)
 
@@ -73,7 +83,7 @@ sowie die Tabellen an.
 
 | Service | Image | Port | Persistenz |
 |---------|-------|------|------------|
-| `web`   | `robi2211/imagepushen-web:latest` (custom) | 8080→80 | – |
+| `web`   | `robi2211/imagepushen-web:latest` (Node.js/Express, custom) | 8080→80 | – |
 | `db`    | `mysql:8` | intern | Volume `db_data` |
 
 Der Webserver startet erst, wenn die Datenbank bereit ist (`depends_on` + `healthcheck`).
@@ -97,7 +107,7 @@ docker push robi2211/imagepushen-web:latest
 
 ## Zukünftige Änderungen der Webseite veröffentlichen
 
-1. Dateien in `web/html/` bearbeiten (z. B. `index.php`).
+1. Dateien in `web/html/` bearbeiten (z. B. `index.html`).
 2. Image neu bauen und pushen:
    ```bash
    docker build -t robi2211/imagepushen-web:latest ./web
@@ -138,10 +148,10 @@ Nur `down -v` löscht das Volume und damit die Daten.
 
 | Anforderung | Lösung |
 |---|---|
-| Webserver installieren | Apache 2 via `php:8.2-apache` |
+| Webserver installieren | Node.js 20 mit Express via `node:20-alpine` |
 | Webseite persistent verfügbar | Custom Image + Docker Volume für DB |
 | Datenbanksystem in Docker | MySQL 8 mit persistentem Volume |
 | Ein Service pro Container | `web` und `db` sind getrennte Services |
 | Eigenes Image erstellt | `robi2211/imagepushen-web:latest` |
-| Image auf Repository gepusht | Docker Hub |
+| Image auf Repository gepusht | Docker Hub (bereits verfügbar) |
 | Anleitung für Lehrperson | Dieser README (git clone + docker-compose up) |
