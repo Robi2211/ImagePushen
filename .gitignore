@@ -1,0 +1,6 @@
+# Secrets - never commit real .env files
+docker-compose/.env
+
+# OS files
+.DS_Store
+Thumbs.db
