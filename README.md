@@ -39,11 +39,6 @@ ImagePushen/
 ```bash
 git clone https://github.com/Robi2211/ImagePushen
 cd ImagePushen
-
-# Passwörter setzen (optional – Standardwerte funktionieren für Tests)
-cp docker-compose/.env.example docker-compose/.env
-# Werte in docker-compose/.env nach Bedarf anpassen
-
 docker-compose -f docker-compose/docker-compose.yml up -d
 ```
 
