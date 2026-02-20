@@ -9,6 +9,7 @@ gebaut mit Docker und Docker Compose.
 
 ```
 ImagePushen/
+├── docker-compose.yml      # Schnellstart vom Projektstamm
 ├── web/
 │   ├── Dockerfile          # Custom Node.js/Express Image
 │   ├── server.js           # Express-Server (API + statische Dateien)
@@ -29,18 +30,27 @@ ImagePushen/
 
 ## Schnellstart (für Lehrperson / Play with Docker)
 
+> **Voraussetzung:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows/macOS) oder Docker + Docker Compose (Linux) muss installiert sein.
+
+**1. Repository klonen**
 ```bash
 git clone https://github.com/Robi2211/ImagePushen
 cd ImagePushen
-
-# Passwörter setzen (optional – Standardwerte funktionieren für Tests)
-cp docker-compose/.env.example docker-compose/.env
-# Werte in docker-compose/.env nach Bedarf anpassen
-
-docker-compose -f docker-compose/docker-compose.yml up -d
 ```
 
-Danach ist die Webseite unter **http://localhost:8080** erreichbar.
+**2. Container starten**
+```bash
+docker-compose up -d
+```
+
+**3. Webseite öffnen**
+
+➜ Browser öffnen und **http://localhost:8080** aufrufen.
+
+Das war's! Docker lädt die Images automatisch herunter – ein eigenes Bauen ist nicht nötig.
+
+> **Stoppen:** `docker-compose down`  
+> **Logs ansehen:** `docker-compose logs -f`
 
 ---
 
@@ -79,7 +89,7 @@ sowie die Tabellen an.
 
 ### 3. Docker Compose
 
-`docker-compose/docker-compose.yml` startet beide Services gemeinsam:
+`docker-compose.yml` (im Projektstamm) startet beide Services gemeinsam:
 
 | Service | Image | Port | Persistenz |
 |---------|-------|------|------------|
@@ -115,8 +125,8 @@ docker push robi2211/imagepushen-web:latest
    ```
 3. Auf dem Zielserver das neue Image holen und Container neu starten:
    ```bash
-   docker-compose -f docker-compose/docker-compose.yml pull web
-   docker-compose -f docker-compose/docker-compose.yml up -d --no-deps web
+   docker-compose pull web
+   docker-compose up -d --no-deps web
    ```
 
 ---
@@ -125,13 +135,13 @@ docker push robi2211/imagepushen-web:latest
 
 ```bash
 # Stoppen (Daten bleiben erhalten)
-docker-compose -f docker-compose/docker-compose.yml down
+docker-compose down
 
 # Starten
-docker-compose -f docker-compose/docker-compose.yml up -d
+docker-compose up -d
 
 # Komplett aufräumen inkl. Volumes (Daten werden gelöscht)
-docker-compose -f docker-compose/docker-compose.yml down -v
+docker-compose down -v
 ```
 
 ---
