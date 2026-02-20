@@ -10,6 +10,33 @@ gebaut mit Docker und Docker Compose.
 
 ---
 
+## ▶️ Jetzt starten (du bist bereits im Projektordner)
+
+Du hast das Repository schon geklont und das Image gebaut/gepusht?
+Dann reicht **einer dieser Befehle** im Projektordner:
+
+```powershell
+# Neueres Docker Desktop (empfohlen):
+docker compose -f docker-compose/docker-compose.yml up -d
+
+# Älteres Docker Desktop / docker-compose CLI:
+docker-compose -f docker-compose/docker-compose.yml up -d
+```
+
+Die Webseite ist danach unter **http://localhost:8080** erreichbar.
+
+> **Tipp:** Beim ersten Start richtet MySQL die Datenbank ein – das dauert ca. 30–60 Sekunden.
+> Das lokal gebaute Image (`robin223567/imagepushen-web:latest`) wird direkt verwendet,
+> ohne dass neu gebaut wird.
+
+### Stoppen
+
+```powershell
+docker compose -f docker-compose/docker-compose.yml down
+```
+
+---
+
 ## Projektstruktur
 
 ```
