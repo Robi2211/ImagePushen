@@ -47,6 +47,27 @@ async function loadEvents() {
         // Restore selection if still present
         if (prevAnmelden) selAnmelden.value = prevAnmelden;
         if (prevListe)    selListe.value    = prevListe;
+
+        // Render event list
+        const listEl = document.getElementById('eventliste');
+        if (data.events.length === 0) {
+            listEl.innerHTML = '<p class="empty-msg">Noch keine Events vorhanden.</p>';
+        } else {
+            let html = `<div class="table-wrapper"><table>
+              <thead><tr><th>#</th><th>Eventname</th><th>Datum</th><th>Beschreibung</th></tr></thead>
+              <tbody>`;
+            data.events.forEach((ev, i) => {
+                const datum = new Date(ev.datum).toLocaleDateString('de-CH');
+                html += `<tr>
+                  <td>${i + 1}</td>
+                  <td>${escapeHtml(ev.name)}</td>
+                  <td>${datum}</td>
+                  <td>${escapeHtml(ev.beschreibung || '–')}</td>
+                </tr>`;
+            });
+            html += '</tbody></table></div>';
+            listEl.innerHTML = html;
+        }
     } catch (err) {
         console.error('Fehler beim Laden der Events:', err);
     }
