@@ -29,5 +29,5 @@ jobs:
           context: ./web
           push: true
           tags: |
-            robi2211/imagepushen-web:latest
-            robi2211/imagepushen-web:${{ github.sha }}
+            robin223567/imagepushen-web:latest
+            robin223567/imagepushen-web:${{ github.sha }}
