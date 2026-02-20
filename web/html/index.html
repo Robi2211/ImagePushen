@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImagePushen - Webseite</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Willkommen bei ImagePushen</h1>
+        <p>Eine einfache Webseite mit JavaScript, HTML, CSS und Node.js in Docker</p>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2>Datenbankverbindung</h2>
+            <div id="db-status">
+                <p class="status loading">&#8987; Verbinde mit der Datenbank&hellip;</p>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Über dieses Projekt</h2>
+            <ul>
+                <li><strong>Webserver:</strong> Node.js mit Express</li>
+                <li><strong>Datenbank:</strong> MySQL 8</li>
+                <li><strong>Orchestrierung:</strong> Docker Compose</li>
+                <li><strong>Persistenz:</strong> Docker Volumes</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 ImagePushen &mdash; Modul 347</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
