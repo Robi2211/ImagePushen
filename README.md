@@ -10,6 +10,33 @@ gebaut mit Docker und Docker Compose.
 
 ---
 
+## ▶️ Jetzt starten (du bist bereits im Projektordner)
+
+Du hast das Repository schon geklont und das Image gebaut/gepusht?
+Dann reicht **einer dieser Befehle** im Projektordner:
+
+```powershell
+# Neueres Docker Desktop (empfohlen):
+docker compose -f docker-compose/docker-compose.yml up -d
+
+# Älteres Docker Desktop / docker-compose CLI:
+docker-compose -f docker-compose/docker-compose.yml up -d
+```
+
+Die Webseite ist danach unter **http://localhost:8080** erreichbar.
+
+> **Tipp:** Beim ersten Start richtet MySQL die Datenbank ein – das dauert ca. 30–60 Sekunden.
+> Das lokal gebaute Image (`robin223567/imagepushen-web:latest`) wird direkt verwendet,
+> ohne dass neu gebaut wird.
+
+### Stoppen
+
+```powershell
+docker compose -f docker-compose/docker-compose.yml down
+```
+
+---
+
 ## Projektstruktur
 
 ```
@@ -27,14 +54,50 @@ ImagePushen/
 ├── db/
 │   └── init.sql            # Initiales Datenbankschema (events, teilnehmer)
 ├── docker-compose/
-│   ├── docker-compose.yml  # Orchestrierung beider Services
-│   └── .env.example        # Beispiel-Umgebungsvariablen
+│   ├── docker-compose.yml      # Orchestrierung (mit lokalem Build)
+│   ├── docker-compose.hub.yml  # Orchestrierung (nur pre-built Image von Docker Hub)
+│   └── .env.example            # Beispiel-Umgebungsvariablen
 └── README.md
 ```
 
 ---
 
-## Schnellstart (für Lehrperson / Play with Docker)
+## 🚀 Start vom Docker Hub Image (empfohlen – kein Build nötig)
+
+Das Web-Image ist fertig gebaut auf Docker Hub verfügbar (`robin223567/imagepushen-web:latest`).
+Damit lässt sich das Projekt mit folgenden drei Befehlen starten:
+
+```bash
+# 1. Repository klonen (wird für init.sql der Datenbank benötigt)
+git clone https://github.com/Robi2211/ImagePushen
+cd ImagePushen
+
+# 2. Fertig gebautes Image von Docker Hub holen und starten
+docker-compose -f docker-compose/docker-compose.hub.yml pull
+docker-compose -f docker-compose/docker-compose.hub.yml up -d
+```
+
+Die Webseite ist danach unter **http://localhost:8080** erreichbar.
+
+> **Hinweis:** Der Befehl `pull` lädt das fertige Image direkt von Docker Hub –
+> es wird **kein lokales Build durchgeführt**. Das Hochfahren dauert beim ersten Mal etwas länger,
+> da MySQL die Datenbank initialisiert.
+
+### Container stoppen
+
+```bash
+docker-compose -f docker-compose/docker-compose.hub.yml down
+```
+
+### Komplett aufräumen (inkl. Datenbankdaten)
+
+```bash
+docker-compose -f docker-compose/docker-compose.hub.yml down -v
+```
+
+---
+
+## Schnellstart mit lokalem Build (für Entwicklung)
 
 ```bash
 git clone https://github.com/Robi2211/ImagePushen
